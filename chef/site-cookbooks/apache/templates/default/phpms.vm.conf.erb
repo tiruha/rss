@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+    ServerName vmcentos
+    DocumentRoot /var/www/src/phpms
+    #DocumentRoot /var/www/src/phpms/rss
+    #DocumentRoot /var/www/src/phpms/public
+
+    <Directory /var/www/src/phpms>
+    #<Directory /var/www/src/phpms/rss>
+    #<Directory /var/www/src/phpms/public>
+        Options All
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+   </Directory>
+</VirtualHost>
+

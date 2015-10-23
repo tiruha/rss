@@ -1,0 +1,4 @@
+services:
+#    rss_recommend.example:
+#        class: Rss\RecommendBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

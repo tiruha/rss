@@ -1,0 +1,3 @@
+rss_recommend_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: RssRecommendBundle:Default:index }
