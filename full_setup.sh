@@ -72,6 +72,9 @@ if [ `hasInstallCommand ${install_command}` = "false" ]; then
     gem install knife-solo 
 fi
 
+### start vagrant ###
+vagrant up
+
 # return success
 return 0
 
