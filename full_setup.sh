@@ -3,6 +3,7 @@
 
 BASEDIR=$(cd $(dirname $0) && pwd)
 
+os_version=el6
 os_bit=x86_64
 
 ### install general ###
@@ -13,15 +14,17 @@ if [ `hasInstallCommand ${install_command}` = "false" ]; then
 fi
 
 ### install VirtualBox ###
-install_version=4.3
 # install dksm
+install_version=0.5.3-1
 install_command=dkms
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
-    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-    sudo rpm -ivh rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-${instal_version}.${os_version}.rf.${os_bit}.rpm
+    sudo rpm -ivh rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
     sudo yum -y install ${install_command}
 fi
+
 # install VirtualBox
+install_version=4.3
 install_command=VirtualBox
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
     cd /etc/yum.repos.d/
@@ -33,8 +36,8 @@ if [ `hasInstallCommand ${install_command}` = "false" ]; then
 fi
 
 ### install vagrant ###
-install_version=1.7.2
 # install vagrant
+install_version=1.7.2
 install_command=vagrant
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
     sudo rpm -Uvh https://dl.bintray.com/mitchellh/vagrant/vagrant_${install_version}_${os_bit}.rpm
@@ -47,9 +50,8 @@ fi
 # install ruby
 install_command=ruby
 install_version=2.2.3
-ruby_version=`ruby -v | awk '{print substr($0, 6, 5)}'`
-comparison_version=1.9.3
-if [ `hasInstallCommand ${install_command}` = "false" || `isVersionComparison ${ruby_version} ${comparison_version}` = "false" ]; then
+
+rubyInstall(){
     git clone git://github.com/sstephenson/rbenv.git
     mkdir -p rbenv/plugins
     cd rbenv/plugins
@@ -64,7 +66,18 @@ if [ `hasInstallCommand ${install_command}` = "false" || `isVersionComparison ${
     rbenv install ${install_version}
     #現在のインストールバージョンを上書き
     #rbenv global
+}
+
+if [ `hasInstallCommand ${install_command}` = "false" ]; then
+    rubyInstall
+else
+    ruby_version=`ruby -v | awk '{print substr($0, 6, 5)}'`
+    comparison_version=1.9.3
+    if [ `isVersionComparison ${ruby_version} ${comparison_version}` = "false" ]; then
+        rubyInstall
+    fi
 fi
+
 # install chef
 install_command=chef
 if [ `hasInstallCommand ${install_command}` = "false" ]; then

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 hasInstallCommand(){
-    CMDNAME=`basename $0`
     N=1
     if [ $# -ne $N ]; then
-        echo "usage: $CMDNAME [rpm name] : rpmが存在しているかをチェック"
+        echo "usage: ${FUNCNAME[0]} [rpm name] : rpmが存在しているかをチェック"
         return 1
     fi
-    ret=`rpm -qa | grep ${1}`
-    if [ -n ${ret} ]; then
+    check_command=${1}
+    result=`rpm -qa | grep ${check_command}`
+    if [ -n "${result}" ]; then
         echo "true"
     else
         echo "false"
@@ -16,10 +16,9 @@ hasInstallCommand(){
 }
 
 isVersionComparison(){
-    CMDNAME=`basename $0`
     N=2
     if [ $# -ne $N ]; then
-        echo "usage: $CMDNAME [チェックするバージョン x.x.x] [比較元 x.x.x] : 比較元以上のバージョンかをチェック"
+        echo "usage: ${FUNCNAME[0]} [チェックするバージョン x.x.x] [比較元 x.x.x] : 比較元以上のバージョンかをチェック"
         return 1
     fi
     check_version=$1
