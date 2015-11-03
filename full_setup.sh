@@ -4,7 +4,31 @@
 BASEDIR=$(cd $(dirname $0) && pwd)
 
 os_version=el6
+os_version_num=6
 os_bit=x86_64
+
+### install repository ###
+# install epel
+install_command=epel
+install_version=8
+if [ `hasInstallCommand ${install_command}` = "false" ]; then
+    wget http://dl.fedoraproject.org/pub/${install_command}/${os_version_num}/${os_bit}/epel-release-${os_version_num}-${install_version}.noarch.rpm
+    sudo rpm -ivh epel-release-${os_version_num}-${install_version}.noarch.rpm
+    sed -i -e "s/enabled *= *1/enabled=0/g" /etc/yum.repos.d/epel.repo
+fi
+# install remi
+install_command=remi
+if [ `hasInstallCommand ${install_command}` = "false" ]; then
+    wget http://rpms.famillecollet.com/enterprise/remi-release-${os_version_num}.rpm
+    sudo rpm -ivh remi-release-${os_version_num}.rpm
+fi
+# install rpmforge
+install_command=rpmforge
+if [ `hasInstallCommand ${install_command}` = "false" ]; then
+    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
+    sudo rpm -ivh rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
+    sed -i -e "s/enabled *= *1/enabled=0/g" /etc/yum.repos.d/rpmforge.repo
+fi
 
 ### install general ###
 # install wget
@@ -18,9 +42,7 @@ fi
 install_version=0.5.3-1
 install_command=dkms
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
-    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
-    sudo rpm -ivh rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
-    sudo yum -y install ${install_command}
+    sudo yum -y --enablerepo=rpmforge install ${install_command}
 fi
 
 # install VirtualBox
@@ -62,8 +84,9 @@ rubyInstall(){
     echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     . ~/.bash_profile
-    sudo yum -y install gcc make openssl-devel libffi-devel readline_devel
+    sudo yum -y --enablerepo=remi,epel install gcc make openssl openssl-devel libffi libffi-devel readline readline_devel libyaml libyaml-devel zlib zlib-devel libxml2 libxml2-devel libxslt libxslt-devel
     rbenv install ${install_version}
+    rbenv rehash
     #現在のインストールバージョンを上書き
     rbenv global
 }
