@@ -8,13 +8,14 @@ $ cd rss
 $ ./full_setup.sh  
 
 # PHP環境の自動化  
+`vagrant up` 実行に必要なコマンド群等をインストール  
 1. リポジトリの追加  
   1. epel  
   2. remi  
   3. rpmforge(dkmsのインストールに必要)  
 1. コマンドのインストール  
   1. wget
-  2. dksm(VertualBoxの管理に推奨)  
+  2. dkms(VertualBoxの管理に推奨)  
   3. ruby(1.9.3以上のバージョン)
 1. 自動環境  
   1. VirtualBox  
