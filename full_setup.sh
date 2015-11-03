@@ -58,14 +58,14 @@ rubyInstall(){
     git clone git://github.com/sstephenson/ruby-build.git
     cd ${BASEDIR}
     echo '#rbenv' >> ~/.bash_profile
-    echo 'export RBENV_ROOT="${BASEDIR}/rbenv"' >> ~/.bash_profile
+    echo "export RBENV_ROOT=\"${BASEDIR}/rbenv\"" >> ~/.bash_profile
     echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     . ~/.bash_profile
-    sudo yum -y install gcc make openssl-devel libffi-devel
+    sudo yum -y install gcc make openssl-devel libffi-devel readline_devel
     rbenv install ${install_version}
     #現在のインストールバージョンを上書き
-    #rbenv global
+    rbenv global
 }
 
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
