@@ -1,4 +1,11 @@
 # RSS拡張システム
+* 開発環境  
+  * Apache 2.2.15 (Unix)  
+  * Symfony 2.7.3  
+    * /var/www/src/phpms/rss/  
+  * mysql  Ver 14.14 Distrib 5.6.26, for Linux (x86_64) using  EditLine wrapper  
+  * PHP 5.5.28  
+  * CentOS release 6.5 (Final) x86_64 GNU/Linux  
 
 # CentOS6.4 への簡単インストール  
 ※VertualBox Hyper-V VMware 等VM環境内では、新たにVMを立ち上げることが出来ない(タイムアウトエラーによって、VMの立ち上げに失敗する)  
