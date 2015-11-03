@@ -38,7 +38,7 @@ if [ `hasInstallCommand ${install_command}` = "false" ]; then
 fi
 
 ### install VirtualBox ###
-# install dksm
+# install dkms
 install_version=0.5.3-1
 install_command=dkms
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
