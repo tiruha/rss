@@ -18,7 +18,7 @@ fi
 install_version=0.5.3-1
 install_command=dkms
 if [ `hasInstallCommand ${install_command}` = "false" ]; then
-    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-${instal_version}.${os_version}.rf.${os_bit}.rpm
+    wget http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
     sudo rpm -ivh rpmforge-release-${install_version}.${os_version}.rf.${os_bit}.rpm
     sudo yum -y install ${install_command}
 fi
