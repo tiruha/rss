@@ -36,6 +36,7 @@ $ ./full_setup.sh
   1. wget
   2. dkms (VertualBox の管理に推奨)  
   3. ruby (1.9.3 以上のバージョン)
+    * gem  
 1. 自動環境  
   1. VirtualBox  
   2. vagrant  
