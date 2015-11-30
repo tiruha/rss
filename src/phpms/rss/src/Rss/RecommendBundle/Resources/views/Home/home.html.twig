@@ -1,0 +1,16 @@
+{% extends "RssRecommendBundle::layout.html.twig" %}
+
+{% block title %}RSS拡張システムホーム画面 | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <ul>
+        <li>ユーザ名: {{ loginUser.userName }}</li>
+        <li>メールアドレス: {{ loginUser.mailAddress }}</li>
+        <li>Twitterアカウント: {{ loginUser.twitterAccount }}</li>
+        <li>パスワード: {{ loginUser.password }}</li>
+    </ul>
+    <form action="{{ path('rss_recommend_home') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" />
+    </form>
+{% endblock %}

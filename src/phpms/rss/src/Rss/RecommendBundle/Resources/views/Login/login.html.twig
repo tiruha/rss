@@ -1,1 +1,10 @@
-RSSログイン画面
+{% extends "RssRecommendBundle::layout.html.twig" %}
+
+{% block title %}RSS拡張システム登録/ログイン画面 | {{ parent() }}{% endblock %}
+
+{% block content %}
+  <form action="{{ path('rss_recommend_login') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" />
+  </form>
+{% endblock %}

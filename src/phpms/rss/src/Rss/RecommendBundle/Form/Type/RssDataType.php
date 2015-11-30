@@ -1,0 +1,20 @@
+<?php
+namespace Rss\RecommendBundle\Form\Type;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class RssDataType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add('URL', 'url', array('required' => false));
+        $builder->add('Synonym', 'text', array('required' => false));
+        $builder->add('SimilarURL', 'url', array('required' => false));
+    }
+
+    public function getName()
+    {
+        return 'rss_data';
+    }
+}

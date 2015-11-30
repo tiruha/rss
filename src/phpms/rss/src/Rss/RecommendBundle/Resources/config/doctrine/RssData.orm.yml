@@ -1,0 +1,23 @@
+Rss\RecommendBundle\Entity\RssData:
+    type: entity
+    table: rss_data
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        uRL:
+            type: string
+            length: 255
+            column: URL
+        synonym:
+            type: string
+            length: 255
+            column: Synonym
+        similarURL:
+            type: string
+            length: 255
+            column: SimilarURL
+    lifecycleCallbacks: {  }

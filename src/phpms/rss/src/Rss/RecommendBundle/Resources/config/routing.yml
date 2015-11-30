@@ -1,3 +1,19 @@
-rss_recommend_homepage:
+rss_recommend_login:
     path:     /login
     defaults: { _controller: RssRecommendBundle:Login:login }
+    requirements: { _method: GET }
+
+rss_recommend_login_post:
+    path:     /login
+    defaults: { _controller: RssRecommendBundle:Login:loginPost }
+    requirements: { _method: POST }
+
+rss_recommend_home:
+    path:     /home
+    defaults: { _controller: RssRecommendBundle:Home:home }
+    requirements: { _method: GET }
+
+rss_recommend_home_post:
+    path:     /home
+    defaults: { _controller: RssRecommendBundle:Home:homePost }
+    requirements: { _method: POST }
