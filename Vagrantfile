@@ -25,6 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       recipe[yum_repo]
       recipe[localedef]
       recipe[remi]
+      recipe[vsftpd]
       recipe[apache]
       recipe[apache::phpms]
       recipe[mysql]
