@@ -27,6 +27,10 @@ class LoginController extends Controller
             $this->container->get('session')->get('loginUser')
         );
         $form->bind($this->getRequest());
-        return $this->redirect($this->generateUrl('rss_recommend_home'));
+        if ($form->isValid()) {
+            return $this->redirect($this->generateUrl('rss_recommend_home'));
+        } else{
+            return $this->render('RssRecommendBundle:Login:login.html.twig', array('form' => $form->createView()));
+        }
     }
 }

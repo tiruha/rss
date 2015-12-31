@@ -1,0 +1,19 @@
+# Rss/RecommendBundle/Resources/config/validation.yml
+Rss\RecommendBundle\Entity\LoginUser:
+    properties:
+        userName:
+            - NotBlank:
+                groups: ["login"]
+            - Length:
+                max: 32
+                groups: ["login"]
+        mailAddress:
+            - Email:
+                groups: ["login"]
+        twitterAccount:
+        password:
+            - NotBlank:
+                groups: ["login"]
+            - Length:
+                min: 6
+                groups: ["login"]

@@ -3,6 +3,7 @@ namespace Rss\RecommendBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class LoginUserType extends AbstractType
 {
@@ -18,4 +19,14 @@ class LoginUserType extends AbstractType
     {
         return 'login_user';
     }
+    
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+                [
+                    'validation_groups' => 'login',
+                ]
+        );
+    }
+    
 }
