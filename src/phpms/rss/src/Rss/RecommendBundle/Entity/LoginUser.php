@@ -3,38 +3,54 @@
 namespace Rss\RecommendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * LoginUser
+ * @ORM\Entity(repositoryClass="Rss\RecommendBundle\Repository\LoginUserRepository")
+ * @ORM\Table(name="login_user", uniqueConstraints={@ORM\UniqueConstraint(name="user_name", columns={"user_name"})})
  */
-class LoginUser
+class LoginUser implements AdvancedUserInterface
 {
     /**
      * @var integer
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     * @ORM\Column(name="user_name", type="string", length=32, nullable=false)
      */
-    private $userName;
+    private $username;
 
     /**
      * @var string
+     * @ORM\Column(name="mail_address", type="string", length=255, nullable=true)
      */
     private $mailAddress;
 
     /**
      * @var string
+     * @ORM\Column(name="twitter_account", type="string", length=255, nullable=true)
      */
     private $twitterAccount;
 
     /**
      * @var string
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     private $password;
-
-
+  
+    private $accountNonExpired = true;
+    private $credentialsNonExpired = true;
+    private $accountNonLocked = true;
+    private $enabled = true;
+    private $roles = array('ROLE_USER');
+    
     /**
      * Get id
      *
@@ -46,26 +62,26 @@ class LoginUser
     }
 
     /**
-     * Set userName
+     * Set username
      *
-     * @param string $userName
+     * @param string $username
      * @return LoginUser
      */
-    public function setUserName($userName)
+    public function setUsername($username)
     {
-        $this->userName = $userName;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get userName
+     * Get username
      *
      * @return string 
      */
-    public function getUserName()
+    public function getUsername()
     {
-        return $this->userName;
+        return $this->username;
     }
 
     /**
@@ -135,5 +151,98 @@ class LoginUser
     public function getPassword()
     {
         return $this->password;
+    }
+    
+    /**
+     * Saltを返すメソッド
+     * Saltは固定の文字列を返す
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return 'loginSecuritySalt';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired()
+    {
+        return $this->accountNonExpired;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked()
+    {
+        return $this->accountNonLocked;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired()
+    {
+        return $this->credentialsNonExpired;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function equals(UserInterface $user)
+    {
+        if (!$user instanceof LoginUser) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->getUsername() !== $user->getUsername()) {
+            return false;
+        }
+
+        if ($this->accountNonExpired !== $user->isAccountNonExpired()) {
+            return false;
+        }
+
+        if ($this->accountNonLocked !== $user->isAccountNonLocked()) {
+            return false;
+        }
+
+        if ($this->credentialsNonExpired !== $user->isCredentialsNonExpired()) {
+            return false;
+        }
+
+        if ($this->enabled !== $user->isEnabled()) {
+            return false;
+        }
+
+        return true;
     }
 }

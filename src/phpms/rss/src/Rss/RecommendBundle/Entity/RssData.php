@@ -6,28 +6,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * RssData
+ *
+ * @ORM\Table(name="rss_data")
+ * @ORM\Entity
  */
 class RssData
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="URL", type="string", length=255, nullable=false)
      */
-    private $uRL;
+    private $url;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="Synonym", type="string", length=255, nullable=false)
      */
     private $synonym;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="SimilarURL", type="string", length=255, nullable=false)
      */
-    private $similarURL;
+    private $similarurl;
+
 
 
     /**
@@ -41,26 +55,26 @@ class RssData
     }
 
     /**
-     * Set uRL
+     * Set url
      *
-     * @param string $uRL
+     * @param string $url
      * @return RssData
      */
-    public function setURL($uRL)
+    public function setUrl($url)
     {
-        $this->uRL = $uRL;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get uRL
+     * Get url
      *
      * @return string 
      */
-    public function getURL()
+    public function getUrl()
     {
-        return $this->uRL;
+        return $this->url;
     }
 
     /**
@@ -87,25 +101,25 @@ class RssData
     }
 
     /**
-     * Set similarURL
+     * Set similarurl
      *
-     * @param string $similarURL
+     * @param string $similarurl
      * @return RssData
      */
-    public function setSimilarURL($similarURL)
+    public function setSimilarurl($similarurl)
     {
-        $this->similarURL = $similarURL;
+        $this->similarurl = $similarurl;
 
         return $this;
     }
 
     /**
-     * Get similarURL
+     * Get similarurl
      *
      * @return string 
      */
-    public function getSimilarURL()
+    public function getSimilarurl()
     {
-        return $this->similarURL;
+        return $this->similarurl;
     }
 }

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>{% block title %}RSS拡張システム{% endblock %}</title>
+    <title>RSS拡張システム {% block title %}{% endblock %}</title>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
   </head>
   <body>
@@ -10,5 +10,6 @@
       {% block content %}
       {% endblock %}
     </div>
+    {% block user_block %}<a href="{{ path('logout') }}">Logout</a>{% endblock%}
   </body>
 </html>

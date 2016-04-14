@@ -55,3 +55,18 @@ template "#{Chef::Config[:file_cache_path]}/create_schema_phpms.sql" do
   notifies :run, 'execute[create_schema_phpms]', :immediately
 end
 
+schema_file = 'create_schema_login_user.sql'
+execute "create_schema_login_user" do
+  command "/usr/bin/mysql -u root #{db_name} < #{Chef::Config[:file_cache_path]}/create_schema_login_user.sql"
+  action :nothing
+  not_if "/usr/bin/mysql -u #{user_name} -p#{user_password} -D #{db_name}  -e 'show tables' | wc -l | xargs expr 1 /"
+end
+
+template "#{Chef::Config[:file_cache_path]}/create_schema_login_user.sql" do
+  owner 'root'
+  group 'root'
+  mode 644
+  source 'create_schema_login_user.sql.erb'
+  notifies :run, 'execute[create_schema_login_user]', :immediately
+end
+

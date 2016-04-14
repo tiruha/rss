@@ -1,0 +1,13 @@
+{% extends "RssRecommendBundle::layout.html.twig" %}
+
+{% block title %}新規ユーザ登録確認画面 | {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <div>{{ error.message }}</div>
+    {% endif %}
+    {{ form_start(form, {'method': 'post', 'action': path("rss_recommend_newuser_post") }) }}
+        {{ form_widget(form) }}
+        <input type="submit" name="new_user_submit" value="新規登録">
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,10 +1,17 @@
 {% extends "RssRecommendBundle::layout.html.twig" %}
 
-{% block title %}RSS拡張システム登録/ログイン画面 | {{ parent() }}{% endblock %}
+{% block title %}登録/ログイン画面 | {{ parent() }}{% endblock %}
 
 {% block content %}
-  <form action="{{ path('rss_recommend_login') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <input type="submit" />
+  {% if error %}
+    <div>{{ error.message }}</div>
+  {% endif %}
+  {{ form_start(form, {'method': 'post', 'action': path("login_check") }) }}
+    {{ form_row(form.user_name) }}
+    {{ form_row(form.password.first) }}
+    <input type="submit" name="login_submit" value="ログイン">
+  {{ form_end(form, {'render_rest': false}) }}
+  <form method="get">
+      <input type="button" value="新規登録" onClick="location.href='{{ path("rss_recommend_newuser") }}'">
   </form>
 {% endblock %}

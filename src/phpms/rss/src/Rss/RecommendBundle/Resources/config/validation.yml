@@ -1,7 +1,7 @@
 # Rss/RecommendBundle/Resources/config/validation.yml
 Rss\RecommendBundle\Entity\LoginUser:
     properties:
-        userName:
+        username:
             - NotBlank:
                 groups: ["login"]
             - Length:
@@ -11,9 +11,25 @@ Rss\RecommendBundle\Entity\LoginUser:
             - Email:
                 groups: ["login"]
         twitterAccount:
+            - Regex:
+                pattern: "/^@[0-9a-zA-Z_]/"
+                message: "Twitterアカウントは、@始まりの英数字で入力してください。記号は「_」のみ使えます。"
+                groups: ["login"]
+            - Length:
+                min: 1
+                max: 15
+                groups: ["login"]
         password:
             - NotBlank:
                 groups: ["login"]
             - Length:
                 min: 6
                 groups: ["login"]
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: username
+            message: "ユーザ名が既に使われています。他のユーザ名を指定してください。"
+            groups: ["login"]
+        - Callback:
+            callback: [Rss\RecommendBundle\Validator\LoginUserValidator, isContactAddressInputed]
+            groups: ["login"]

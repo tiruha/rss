@@ -4,20 +4,32 @@ Rss\RecommendBundle\Entity\RssData:
     id:
         id:
             type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
             id: true
             generator:
-                strategy: AUTO
+                strategy: IDENTITY
     fields:
-        uRL:
+        url:
             type: string
+            nullable: false
             length: 255
+            fixed: false
+            comment: ''
             column: URL
         synonym:
             type: string
+            nullable: false
             length: 255
+            fixed: false
+            comment: ''
             column: Synonym
-        similarURL:
+        similarurl:
             type: string
+            nullable: false
             length: 255
+            fixed: false
+            comment: ''
             column: SimilarURL
     lifecycleCallbacks: {  }

@@ -1,11 +1,32 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+    # password のハッシュ化
+    encoders:
+        Rss\RecommendBundle\Entity\LoginUser:
+            algorithm: sha512
+            encode_as_base64: true
+            iterations: 50
+    
+    # 権限継承
+    role_hierarchy:
+        # ROLE_ADMINはROLE_USERの権限も持つ
+        ROLE_ADMIN: ROLE_USER
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    # ユーザー情報の設定（ユーザープロバイダ）
     providers:
+        chain_provider:
+            chain:
+                providers: [in_memory,user_db]
         in_memory:
-            memory: ~
+            memory:
+                # コンフィギュレーションファイルに設定したユーザ・パスワードでログイン
+                users:
+                    user1: { password: wpsar7/vk7tgVtYyAYiSzzNXnjsnPPNe038eHYiYgA/79cz/z7XLCtXZcMwDmQI66VQObclzz4QIjl0FrTXxoA==, roles: [ 'ROLE_USER' ] }
+        user_db:
+            # Entityクラスの指定とユーザー名となるプロパティを指定
+            entity: { class: Rss\RecommendBundle\Entity\LoginUser, property: username }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,12 +34,40 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
+        # 認証エリアの設定
+        secured_area:
+            # プロバイダの設定
+            provider: user_db
+            # エリア範囲（正規表現）
+            pattern: ^/
+            # 匿名ユーザを許可
             anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
+            # ログインフォームの設定
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            form_login:
+                # ログインフォームのパス
+                login_path: /login
+                # ログイン状態を確認するパス
+                check_path: /login_check
+                # リダイレクト先
+                default_target_path: /home
+                # 常にデフォルトのリダイレクト先に遷移
+                always_use_default_target_path: true
+                # ログイン失敗時
+                failure_path: /login_failure
+                # ユーザ名とパスワードのフィールド名(formに設定しているnameの値)
+                username_parameter: login_user[user_name]
+                password_parameter: login_user[password][first]
+            # ログアウトの設定
+            logout:
+                # ログアウト用のURLのパス
+                path: /logout
+                # ログアウト後に移行するページ
+                target: /
+
+    # アクセス権限の設定
+    access_control:
+        # /login は権限不要でアクセス可能
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # /home から始まるコンテンツにアクセスするには ROLE_USER 権限が必要
+        - { path: ^/(home|home/.*), roles: ROLE_USER }

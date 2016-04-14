@@ -1,4 +1,9 @@
+# ログインアクション
 rss_recommend_login:
+    path:     /
+    defaults: { _controller: RssRecommendBundle:Login:login }
+
+rss_recommend_login_get:
     path:     /login
     defaults: { _controller: RssRecommendBundle:Login:login }
     requirements: { _method: GET }
@@ -8,6 +13,29 @@ rss_recommend_login_post:
     defaults: { _controller: RssRecommendBundle:Login:loginPost }
     requirements: { _method: POST }
 
+rss_recommend_login_failure:
+    path:     /login_failure
+    defaults: { _controller: RssRecommendBundle:Login:loginFailure }
+
+rss_recommend_newuser:
+    path:     /login/newuser
+    defaults: { _controller: RssRecommendBundle:Login:newUser }
+    requirements: { _method: GET }
+
+rss_recommend_newuser_post:
+    path:     /login/newuser
+    defaults: { _controller: RssRecommendBundle:Login:newUserPost }
+    requirements: { _method: POST }
+
+# ログイン確認
+login_check:
+    path: /login_check
+
+# ログアウト
+logout:
+    path: /logout
+
+# ログイン後アクション
 rss_recommend_home:
     path:     /home
     defaults: { _controller: RssRecommendBundle:Home:home }

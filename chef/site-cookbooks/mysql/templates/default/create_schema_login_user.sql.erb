@@ -1,0 +1,16 @@
+CREATE TABLE `login_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `mail_address` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `twitter_account` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  unique(`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+# user1のpasswordは、'password'をsha512アルゴリズムでハッシュ化したものを登録
+INSERT INTO login_user (user_name, mail_address, twitter_account, password) VALUES ('user1', 'sample@co.jp', '@sample', 'wpsar7/vk7tgVtYyAYiSzzNXnjsnPPNe038eHYiYgA/79cz/z7XLCtXZcMwDmQI66VQObclzz4QIjl0FrTXxoA==');
+# user2のpasswordは、'password2'をsha512アルゴリズムでハッシュ化したものを登録
+INSERT INTO login_user (user_name, mail_address, twitter_account, password) VALUES ('user2', NULL, '@sample', '2DndU/gziDQkk+KNt9N4CX2toMF8nb7lhIzqQdV7R8+Q5HsulChEX/c0u1D4zI+AQXClUFblYdvZgrtQPd8rmg==');
+# user3のpasswordは、'password3'をsha512アルゴリズムでハッシュ化したものを登録
+INSERT INTO login_user (user_name, mail_address, twitter_account, password) VALUES ('user3', 'sample@co.jp', NULL, 'eE+30AYWDysOVh/8oCAB473cotvy6DJdRxB/S7GsQVitng0XTanQ4dxRh/21YMsAVuNGaFriGWIYaOe940gFJA==');
