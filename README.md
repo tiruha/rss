@@ -14,6 +14,83 @@ RSS等のURLを登録することで、サイトの更新を検知し知らせ�
 更新されたサイト内を解析し、ユーザが登録した内容に従い通知するかどうかを判断する。  
 
 
+
+# ディレクトリ構造
+
+```
+rss/
++-- README.md
++-- Vagrantfile ... 仮想マシン(CentOS6.5)の起動設定
++-- common_function.sh ... bashスクリプトの共通関数
++-- full_setup.sh ... 開発環境の自動インストール
++-- hasInstallCommand_test.sh ... bashスクリプトのテストコード(コマンドがインストールされているかのチェック)
++-- isVersionComparison_test.sh ... bashスクリプトのテストコード(versionチェック) 
++-- src ... ソースコード
+    +-- phpms
+        +-- README.md ... システムに対する説明の詳細
+        +-- composer.phar ... Symfony2の設定に使用
+        +-- public ... PHPテスト用
+        ¦   +-- index.php ... phpinfo
+        ¦   +-- select_test.php ... DBアクセスの確認
+        +-- rss ... 
+            +-- app
+            ¦   +-- cache
+            ¦   +-- config
+            ¦   ¦   +-- config.yml ... システム全体の設定
+            ¦   ¦   +-- security.yml ... ファイヤーオールなどのセキュリティ設定
+            ¦   +-- logs
+            +-- src
+            ¦   +-- AppBundle ... サンプル
+            ¦   +-- Rss/RecommendBundle ... 本システム
+            +-- web
+                +-- config.php ... アクセスが可能なクライアントの設定
++-- chef ... 開発環境の作成を自動化するコード
+    +-- site-cookbooks
+        +-- apache
+        ¦   +-- recipes
+        ¦   ¦   +-- default.rb ... httpdの設定
+        ¦   ¦   +-- phpms.rb ... VirtualHostの設定
+        ¦   ¦   +-- restart.rb ... httpdの再起動
+        ¦   +-- templates
+        ¦       +-- default
+        ¦           +-- httpd-2.2.conf.erb ... httpdの設定ファイル
+        ¦           +-- phpms.vm.conf.erb ... VirtualHostの設定ファイル
+        +-- localedef
+        ¦   +-- recipes
+        ¦       +-- default.rb ... ロケールの設定
+        +-- mysql
+        ¦   +-- recipes
+        ¦       +-- createdb_phpms.rb ... DB,テーブルの作成
+        ¦       +-- default.rb ... MySQLのインストール
+        ¦   +-- templates
+        ¦       +-- default
+        ¦           +-- create_schema_login_user.sql.erb ... LoginUserテーブルの作成SQL
+        ¦           +-- create_schema_phpms.sql.erb ... テストテーブルの作成SQL
+        ¦           +-- createdb.sql.erb ... DB作成SQL
+        ¦           +-- createuser.sql.erb ... ユーザ作成SQL
+        ¦           +-- my.cnf.utf8.erb ... MySQLの設定ファイル
+        +-- php
+        ¦   +-- recipes
+        ¦       +-- default.rb ... phpのインストール
+        ¦   +-- templates
+        ¦       +-- default
+        ¦           +-- php.ini.timezone.erb ... phpの設定ファイル
+        +-- remi
+        ¦   +-- recipes
+        ¦       +-- default.rb ... yumリポジトリにRemiを追加(CentOS6)
+        ¦       +-- default.rb.centos7.bk ... yumリポジトリにRemiを追加(CentOS7)
+        +-- vsftpd
+        ¦   +-- recipes
+        ¦       +-- default.rb ... FTPサーバのインストール
+        ¦   +-- templates
+        ¦       +-- default
+        ¦           +-- vsftpd.conf.erb ... FTPサーバの設定ファイル
+        +-- yum_repo
+            +-- recipes
+                +-- default.rb ... EPELリポジトリの追加
+```
+
+
 # CentOS6.4 への簡単インストール  
 
 ※ VertualBox Hyper-V VMware 等VM環境内では、新たにVMを立ち上げることが出来ない(タイムアウトエラーによって、VMの立ち上げに失敗する)  
