@@ -26,25 +26,25 @@ rss/
 +-- hasInstallCommand_test.sh ... bashスクリプトのテストコード(コマンドがインストールされているかのチェック)
 +-- isVersionComparison_test.sh ... bashスクリプトのテストコード(versionチェック) 
 +-- src ... ソースコード
-    +-- phpms
-        +-- README.md ... システムに対する説明の詳細
-        +-- composer.phar ... Symfony2の設定に使用
-        +-- public ... PHPテスト用
-        ¦   +-- index.php ... phpinfo
-        ¦   +-- select_test.php ... DBアクセスの確認
-        +-- rss ... 
-            +-- app
-            ¦   +-- cache
-            ¦   +-- config
-            ¦   ¦   +-- config.yml ... システム全体の設定
-            ¦   ¦   +-- security.yml ... ファイヤーオールなどのセキュリティ設定
-            ¦   +-- logs
-            +-- src
-            ¦   +-- AppBundle ... サンプル
-            ¦   +-- Rss/RecommendBundle ... 本システム
-            +-- web
-                +-- config.php ... アクセスが可能なクライアントの設定
-+-- chef ... 開発環境の作成を自動化するコード
+¦   +-- phpms
+¦       +-- README.md ... システムに対する説明の詳細
+¦       +-- composer.phar ... Symfony2の設定に使用
+¦       +-- public ... PHPテスト用
+¦       ¦   +-- index.php ... phpinfo
+¦       ¦   +-- select_test.php ... DBアクセスの確認
+¦       --- rss ... 
+¦           +-- app
+¦           ¦   +-- cache
+¦           ¦   +-- config
+¦           ¦   ¦   +-- config.yml ... システム全体の設定
+¦           ¦   ¦   +-- security.yml ... ファイヤーオールなどのセキュリティ設定
+¦           ¦   +-- logs
+¦           +-- src
+¦           ¦   +-- AppBundle ... サンプル
+¦           ¦   +-- Rss/RecommendBundle ... 本システム
+¦           --- web
+¦               +-- config.php ... アクセスが可能なクライアントの設定
+--- chef ... 開発環境の作成を自動化するコード
     +-- site-cookbooks
         +-- apache
         ¦   +-- recipes
@@ -85,7 +85,7 @@ rss/
         ¦   +-- templates
         ¦       +-- default
         ¦           +-- vsftpd.conf.erb ... FTPサーバの設定ファイル
-        +-- yum_repo
+        --- yum_repo
             +-- recipes
                 +-- default.rb ... EPELリポジトリの追加
 ```
