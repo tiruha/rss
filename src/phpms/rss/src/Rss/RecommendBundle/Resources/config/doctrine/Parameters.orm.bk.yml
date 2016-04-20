@@ -1,0 +1,77 @@
+Rss\RecommendBundle\Entity\Parameters:
+    type: entity
+    table: parameters
+    uniqueConstraints:
+        url_id:
+            columns:
+                - url_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        matchingRangeSynonymDocument:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: matching_range_synonym_document
+        rangeSynonymSubSynonymDocumentMatchedWeight:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: range_synonym__sub_synonym_document_matched_weight
+        rangeSynonymMainSynonymDocumentMatchedWeight:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: range_synonym__main_synonym_document_matched_weight
+        matchingRangeKeywordDocument:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: matching_range_keyword_document
+        rangeKeywordSubSynonymDocumentMatchedWeight:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: range_keyword__sub_synonym_document_matched_weight
+        rangeKeywordMainSynonymDocumentMatchedWeight:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: range_keyword__main_synonym_document_matched_weight
+        synonymKeywordMatchedWeight:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+            column: synonym_keyword_matched_weight
+    manyToOne:
+        url:
+            targetEntity: Url
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                url_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

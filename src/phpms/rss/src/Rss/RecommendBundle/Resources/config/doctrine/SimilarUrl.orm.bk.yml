@@ -1,0 +1,35 @@
+Rss\RecommendBundle\Entity\SimilarUrl:
+    type: entity
+    table: similar_url
+    indexes:
+        similar_url:
+            columns:
+                - url_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        similarUrl:
+            type: string
+            nullable: true
+            length: 1000
+            fixed: false
+            comment: ''
+            column: similar_url
+    manyToOne:
+        url:
+            targetEntity: Url
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                url_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

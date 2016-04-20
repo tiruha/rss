@@ -1,0 +1,41 @@
+Rss\RecommendBundle\Entity\Synonym:
+    type: entity
+    table: synonym
+    indexes:
+        synonym:
+            columns:
+                - url_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        synonym:
+            type: string
+            nullable: true
+            length: 5000
+            fixed: false
+            comment: ''
+        synonymSeverity:
+            type: string
+            nullable: true
+            length: 30
+            fixed: false
+            comment: ''
+            column: synonym_severity
+    manyToOne:
+        url:
+            targetEntity: Url
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                url_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

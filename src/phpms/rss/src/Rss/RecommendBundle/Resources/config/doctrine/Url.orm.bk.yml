@@ -1,0 +1,45 @@
+Rss\RecommendBundle\Entity\Url:
+    type: entity
+    table: url
+    indexes:
+        url:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        url:
+            type: string
+            nullable: false
+            length: 1000
+            fixed: false
+            comment: ''
+        lastUpdatingTime:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: last_updating_time
+        websiteBytesNumber:
+            type: smallint
+            nullable: true
+            unsigned: true
+            comment: ''
+            column: website_bytes_number
+    manyToOne:
+        user:
+            targetEntity: LoginUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
