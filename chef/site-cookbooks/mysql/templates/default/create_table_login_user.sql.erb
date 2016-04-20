@@ -6,7 +6,7 @@ CREATE TABLE `login_user` (
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   unique(`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 # user1のpasswordは、'password'をsha512アルゴリズムでハッシュ化したものを登録
 INSERT INTO login_user (user_name, mail_address, twitter_account, password) VALUES ('user1', 'sample@co.jp', '@sample', 'wpsar7/vk7tgVtYyAYiSzzNXnjsnPPNe038eHYiYgA/79cz/z7XLCtXZcMwDmQI66VQObclzz4QIjl0FrTXxoA==');

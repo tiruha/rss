@@ -1,0 +1,13 @@
+CREATE TABLE `url` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `url` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
+  `last_updating_time` DATETIME NULL,
+  `website_bytes_number` SMALLINT UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY url(user_id) REFERENCES login_user(id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO url (user_id, url, last_updating_time, website_bytes_number) VALUES (1, 'http://vmcentos/public/dummy.php', '2016-04-18 18:00:00', 10);
+INSERT INTO url (user_id, url, last_updating_time, website_bytes_number) VALUES (1, 'http://vmcentos/public/dummy2.php', NULL, 10);
+INSERT INTO url (user_id, url, last_updating_time, website_bytes_number) VALUES (2, 'http://vmcentos/public/dummy3.php', '2016-04-18 18:00:00', NULL);

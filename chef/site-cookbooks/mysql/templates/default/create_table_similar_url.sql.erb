@@ -1,0 +1,11 @@
+CREATE TABLE `similar_url` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url_id` int(11) NOT NULL,
+  `similar_url` varchar(1000) COLLATE utf8_unicode_ci NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY similar_url(url_id) REFERENCES url(id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO similar_url (url_id, similar_url) VALUES (1, 'http://vmcentos/public/dummy3.php');
+INSERT INTO similar_url (url_id, similar_url) VALUES (1, NULL);
+INSERT INTO similar_url (url_id, similar_url) VALUES (2, 'http://vmcentos/public/dummy3.php');

@@ -1,0 +1,12 @@
+CREATE TABLE `synonym` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url_id` int(11) NOT NULL,
+  `synonym` varchar(5000) COLLATE utf8_unicode_ci NULL,
+  `synonym_severity` varchar(30) COLLATE utf8_unicode_ci NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY synonym(url_id) REFERENCES url(id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO synonym (url_id, synonym, synonym_severity) VALUES (1, 'test', 'main');
+INSERT INTO synonym (url_id, synonym, synonym_severity) VALUES (1, 'sample,dummy', 'sub');
+INSERT INTO synonym (url_id, synonym, synonym_severity) VALUES (2, 'コンピュータプログラマー,コンピュータプログラマ,コンピュータープログラマー,コンピュータープログラマ,プログラマー,コンピュータプログラマ,プログラマー,programmer,Programmer', 'main');

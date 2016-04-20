@@ -1,0 +1,31 @@
+CREATE TABLE `parameters` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url_id` int(11) NOT NULL,
+  `matching_range_synonym_document` float UNSIGNED NULL,
+  `range_synonym__sub_synonym_document_matched_weight` float UNSIGNED NULL,
+  `range_synonym__main_synonym_document_matched_weight` float UNSIGNED NULL,
+  `matching_range_keyword_document` float UNSIGNED NULL,
+  `range_keyword__sub_synonym_document_matched_weight` float UNSIGNED NULL,
+  `range_keyword__main_synonym_document_matched_weight` float UNSIGNED NULL,
+  `synonym_keyword_matched_weight` float UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY parameters(url_id) REFERENCES url(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  unique(`url_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO parameters (url_id,
+    matching_range_synonym_document,
+    range_synonym__sub_synonym_document_matched_weight,
+    range_synonym__main_synonym_document_matched_weight,
+    matching_range_keyword_document,
+    range_keyword__sub_synonym_document_matched_weight,
+    range_keyword__main_synonym_document_matched_weight,
+    synonym_keyword_matched_weight)
+  VALUES (1,
+    0.3,
+    1.1,
+    1.2,
+    0.2,
+    1.3,
+    1.5,
+    1.8);

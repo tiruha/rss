@@ -1,0 +1,11 @@
+CREATE TABLE `rss_url` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `rss_url` varchar(1000) COLLATE utf8_unicode_ci NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY rss_url(user_id) REFERENCES login_user(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  unique(`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO rss_url (user_id, rss_url) VALUES (1, 'http://vmcentos/public/rss1.php');
+INSERT INTO rss_url (user_id, rss_url) VALUES (2, 'http://vmcentos/public/rss2.php');
