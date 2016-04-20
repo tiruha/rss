@@ -32,6 +32,8 @@ class LoginUserType extends AbstractType
                 [
                     'validation_groups' => 'login',
                     'data_class' => 'Rss\RecommendBundle\Entity\LoginUser',
+                    'csrf_protection' => true,
+                    'csrf_field_name' => '_token',
                 ]
         );
     }

@@ -9,6 +9,7 @@
   {{ form_start(form, {'method': 'post', 'action': path("login_check") }) }}
     {{ form_row(form.user_name) }}
     {{ form_row(form.password.first) }}
+    {{ form_row(form._token) }}
     <input type="submit" name="login_submit" value="ログイン">
   {{ form_end(form, {'render_rest': false}) }}
   <form method="get">
