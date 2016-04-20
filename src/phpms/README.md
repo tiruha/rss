@@ -36,13 +36,12 @@ rss/src/phpms/rss/src/Rss/RecommendBundle/
 ```
 
 * URL  
-  * http://vmcentos/rss/web/app_dev.php/login  
-  * http://vmcentos/rss/web/config.php  
+  * <a href="http://vmcentos/rss/web/app_dev.php/login" target="_blank">RSS拡張システム</a>  
+  * <a href="http://vmcentos/rss/web/config.php" target="_blank">Symfonyの動作確認</a>  
 
 # 正しく動作しているかのテスト  
 * ソースコード    
   * rss/src/phpms/public/ 配下  
 * URL  
-  * http://vmcentos/public/index.php  
-  * http://vmcentos/public/select_test.php  
-
+  * <a href="http://vmcentos/public/index.php" target="_blank">PHPの動作確認</a>  
+  * <a href="http://vmcentos/public/select_test.php" target="_blank">DB接続の動作確認</a>  
