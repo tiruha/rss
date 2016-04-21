@@ -1,11 +1,12 @@
 CREATE TABLE `url_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
   `url_id` int(11) NOT NULL,
-  `url_group` varchar(30) COLLATE utf8_unicode_ci NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY url_group(url_id) REFERENCES url(id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY url_group_group_id(group_id) REFERENCES url_group_user(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY url_group_url_id(url_id) REFERENCES url(id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO url_group (url_id, url_group) VALUES (1, 'ニュース');
-INSERT INTO url_group (url_id, url_group) VALUES (1, NULL);
-INSERT INTO url_group (url_id, url_group) VALUES (2, 'スポーツ');
+INSERT INTO url_group (group_id, url_id) VALUES (1, 1);
+INSERT INTO url_group (group_id, url_id) VALUES (1, 2);
+INSERT INTO url_group (group_id, url_id) VALUES (2, 2);

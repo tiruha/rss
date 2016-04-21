@@ -1,0 +1,35 @@
+Rss\RecommendBundle\Entity\UrlGroupUser:
+    type: entity
+    table: url_group_user
+    indexes:
+        url_group_user:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        urlGroupName:
+            type: string
+            nullable: true
+            length: 30
+            fixed: false
+            comment: ''
+            column: url_group_name
+    manyToOne:
+        user:
+            targetEntity: LoginUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

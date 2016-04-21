@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UrlGroup
  *
- * @ORM\Table(name="url_group", indexes={@ORM\Index(name="url_group", columns={"url_id"})})
+ * @ORM\Table(name="url_group", indexes={@ORM\Index(name="url_group_group_id", columns={"group_id"}), @ORM\Index(name="url_group_url_id", columns={"url_id"})})
  * @ORM\Entity(repositoryClass="Rss\RecommendBundle\Repository\UrlGroupRepository")
  */
 class UrlGroup
@@ -22,11 +22,14 @@ class UrlGroup
     private $id;
 
     /**
-     * @var string
+     * @var \Rss\RecommendBundle\Entity\UrlGroupUser
      *
-     * @ORM\Column(name="url_group", type="string", length=30, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Rss\RecommendBundle\Entity\UrlGroupUser")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     * })
      */
-    private $urlGroup;
+    private $group;
 
     /**
      * @var \Rss\RecommendBundle\Entity\Url
@@ -51,26 +54,26 @@ class UrlGroup
     }
 
     /**
-     * Set urlGroup
+     * Set group
      *
-     * @param string $urlGroup
+     * @param \Rss\RecommendBundle\Entity\UrlGroupUser $group
      * @return UrlGroup
      */
-    public function setUrlGroup($urlGroup)
+    public function setGroup(\Rss\RecommendBundle\Entity\UrlGroupUser $group = null)
     {
-        $this->urlGroup = $urlGroup;
+        $this->group = $group;
 
         return $this;
     }
 
     /**
-     * Get urlGroup
+     * Get group
      *
-     * @return string 
+     * @return \Rss\RecommendBundle\Entity\UrlGroupUser 
      */
-    public function getUrlGroup()
+    public function getGroup()
     {
-        return $this->urlGroup;
+        return $this->group;
     }
 
     /**

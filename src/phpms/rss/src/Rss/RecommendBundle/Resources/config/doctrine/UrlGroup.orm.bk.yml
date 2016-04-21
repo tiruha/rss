@@ -2,7 +2,10 @@ Rss\RecommendBundle\Entity\UrlGroup:
     type: entity
     table: url_group
     indexes:
-        url_group:
+        url_group_group_id:
+            columns:
+                - group_id
+        url_group_url_id:
             columns:
                 - url_id
     id:
@@ -14,15 +17,16 @@ Rss\RecommendBundle\Entity\UrlGroup:
             id: true
             generator:
                 strategy: IDENTITY
-    fields:
-        urlGroup:
-            type: string
-            nullable: true
-            length: 30
-            fixed: false
-            comment: ''
-            column: url_group
     manyToOne:
+        group:
+            targetEntity: UrlGroupUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                group_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         url:
             targetEntity: Url
             cascade: {  }
