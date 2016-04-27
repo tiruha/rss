@@ -15,7 +15,7 @@ class Log
     public static function info($msg){
         list($micro, $Unixtime) = explode(" ", microtime());
         $sec = $micro + date("s", $Unixtime);
-        $time = date("Y-m-d- H:i:", $Unixtime).$sec;
+        $time = date("Y-m-d H:i:", $Unixtime).$sec;
         // ファイルの出力先を指定
         $file = "/var/www/src/phpms/rss/app/logs/dev.log";
         // 出力するログメッセージを表示

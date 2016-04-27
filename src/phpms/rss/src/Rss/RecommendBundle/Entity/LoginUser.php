@@ -52,6 +52,11 @@ class LoginUser implements AdvancedUserInterface
     private $roles = array('ROLE_USER');
     
     /**
+     * @ORM\OneToMany(targetEntity="Rss\RecommendBundle\Entity\Url", mappedBy="user")
+     */
+    protected $url;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -244,5 +249,45 @@ class LoginUser implements AdvancedUserInterface
         }
 
         return true;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->url = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add url
+     *
+     * @param \Rss\RecommendBundle\Entity\Url $url
+     * @return LoginUser
+     */
+    public function addUrl(\Rss\RecommendBundle\Entity\Url $url)
+    {
+        $this->url[] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Remove url
+     *
+     * @param \Rss\RecommendBundle\Entity\Url $url
+     */
+    public function removeUrl(\Rss\RecommendBundle\Entity\Url $url)
+    {
+        $this->url->removeElement($url);
+    }
+
+    /**
+     * Get url
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }

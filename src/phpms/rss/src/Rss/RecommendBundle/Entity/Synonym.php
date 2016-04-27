@@ -17,7 +17,8 @@ class Synonym
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Rss\RecommendBundle\Repository\Id\IdCustomGenerator")
      */
     private $id;
 
@@ -38,9 +39,9 @@ class Synonym
     /**
      * @var \Rss\RecommendBundle\Entity\Url
      *
-     * @ORM\ManyToOne(targetEntity="Rss\RecommendBundle\Entity\Url")
+     * @ORM\ManyToOne(targetEntity="Rss\RecommendBundle\Entity\Url", inversedBy="synonym")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="url_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="url_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $url;

@@ -3,6 +3,7 @@
 namespace Rss\RecommendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Url
@@ -17,7 +18,8 @@ class Url
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Rss\RecommendBundle\Repository\Id\IdCustomGenerator")
      */
     private $id;
 
@@ -45,15 +47,28 @@ class Url
     /**
      * @var \Rss\RecommendBundle\Entity\LoginUser
      *
-     * @ORM\ManyToOne(targetEntity="Rss\RecommendBundle\Entity\LoginUser")
+     * @ORM\ManyToOne(targetEntity="Rss\RecommendBundle\Entity\LoginUser", inversedBy="url")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Rss\RecommendBundle\Entity\Synonym", mappedBy="url", cascade={"persist"})
+     */
+    protected $synonym;
 
-
+    
+    
+    /**
+     * 関連するEntityを配列で作成
+     */
+    public function __construct()
+    {
+        $this->synonym = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -154,5 +169,48 @@ class Url
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     * @return Url
+     */
+    public function addSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym[] = $synonym;
+
+        return $this;
+    }
+
+    /**
+     * Remove synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     */
+    public function removeSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym->removeElement($synonym);
+    }
+
+    /**
+     * Get synonym
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSynonym()
+    {
+        return $this->synonym;
+    }
+    
+    /**
+     * Set synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     */
+    public function setSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym->add($synonym);
     }
 }

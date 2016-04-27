@@ -3,19 +3,30 @@
 namespace Rss\RecommendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Rss\RecommendBundle\Entity\RssData;
-use Rss\RecommendBundle\Form\Type\RssDataType;
+use Rss\RecommendBundle\Entity\Url;
+use Rss\RecommendBundle\Form\Type\UrlType;
+use Rss\RecommendBundle\Entity\Synonym;
 
 class HomeController extends Controller
 {
     public function homeAction()
     {
-        if (!$this->container->get('session')->has('rssData')) {
-            $this->container->get('session')->set('rssData', new RssData());
+        if (!$this->container->get('session')->has('url')) {
+            // default data
+            $url_data = new Url();
+            // 入力用に空のデータを追加
+            $synonym = new Synonym();
+            $synonym->setSynonym(NULL);
+            $synonym->setSynonymSeverity("main");
+            $url_data->setSynonym($synonym);
+            // ユーザ情報を設定
+            $url_data->setUser($this->get('security.context')->getToken()->getUser());
+            $this->container->get('session')->set('url', $url_data);
         }
+        
         $form = $this->createForm(
-            new RssDataType(), 
-            $this->container->get('session')->get('rssData')
+            new UrlType(),
+            $this->container->get('session')->get('url')
         );
         
         return $this->render('RssRecommendBundle:Home:home.html.twig', 
@@ -28,11 +39,51 @@ class HomeController extends Controller
     
     public function homePostAction()
     {
+        $logger = $this->get('logger');
+        $logger->info("home post action");
+        
         $form = $this->createForm(
-            new RssDataType(), 
-            $this->container->get('session')->get('rssData')
+            new UrlType(), 
+            $this->container->get('session')->get('url')
         );
         $form->bind($this->getRequest());
-        return $this->redirect($this->generateUrl('rss_recommend_home_post'));
+        $form_data = $form->getData();
+        // 登録されているデータがない場合、新規データを設定
+        foreach ($form_data->getSynonym() as $synonym_data) {
+            if($synonym_data->getSynonymSeverity() === "sub"){
+                $target_synonym_data = $synonym_data;
+            }
+        }
+        if(!isset($target_synonym_data)) {
+            // 類似語の追加
+            $synonym = new Synonym();
+            // TODO: 類義語を取得する処理を追加
+            // 仮データを追加
+            $synonym->setSynonym("類義語辞典");
+            $synonym->setSynonymSeverity("sub");
+            $form_data->setSynonym($synonym);
+        }
+        else {
+            // TODO: 類義語を取得する処理を追加
+            // 仮データに上書き
+            $target_synonym_data->setSynonym("類義語辞典");
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        // EntityManagerにセッション情報を登録
+        $url_data = $em->merge($form_data);
+        $user_data = $em->merge($form_data->getUser());
+        foreach ($form_data->getSynonym() as $synonym) {
+            $synonym_data = $em->merge($synonym);
+            $url_data->setSynonym($synonym_data);
+            $synonym_data->setUrl($url_data);
+        }
+        $url_data->setUser($user_data);
+        $url_data->getUser()->addUrl($url_data);
+        // DBに登録
+        $em->persist($url_data);
+        $em->flush();
+        $this->container->get('session')->set('url', $url_data);
+        return $this->redirect($this->generateUrl('rss_recommend_home'));
     }
 }
