@@ -103,6 +103,21 @@ template "#{Chef::Config[:file_cache_path]}/#{table_file}" do
   notifies :run, 'execute[create_table_synonym]', :immediately
 end
 
+table_file = 'create_table_url_group_user.sql'
+execute "create_table_url_group_user" do
+  command "/usr/bin/mysql -u root #{db_name} < #{Chef::Config[:file_cache_path]}/#{table_file}"
+  action :nothing
+  not_if "/usr/bin/mysql -u #{user_name} -p#{user_password} -D #{db_name}  -e 'show tables' | wc -l | xargs expr 1 /"
+end
+
+template "#{Chef::Config[:file_cache_path]}/#{table_file}" do
+  owner 'root'
+  group 'root'
+  mode 644
+  source "#{table_file}.erb"
+  notifies :run, 'execute[create_table_url_group_user]', :immediately
+end
+
 table_file = 'create_table_url_group.sql'
 execute "create_table_url_group" do
   command "/usr/bin/mysql -u root #{db_name} < #{Chef::Config[:file_cache_path]}/#{table_file}"
