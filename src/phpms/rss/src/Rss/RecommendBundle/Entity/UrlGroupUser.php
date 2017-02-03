@@ -39,7 +39,6 @@ class UrlGroupUser
     private $user;
 
 
-
     /**
      * Get id
      *

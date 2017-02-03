@@ -45,3 +45,7 @@ rss_recommend_home_post:
     path:     /home
     defaults: { _controller: RssRecommendBundle:Home:homePost }
     requirements: { _method: POST }
+
+rss_recommend_synonym:
+    path:     /home/synonym
+    defaults: { _controller: RssRecommendBundle:Home:synonym }

@@ -11,10 +11,13 @@
     </ul>
     {{ form_start(form, {'method': 'post', 'action': path("rss_recommend_home_post") }) }}
         {{ form_row(form.url) }}
+        {{ form_row(form.group.url_group) }}
         {{ form_row(form.synonym[0].synonym) }}
         {% if form.synonym|length >= 2 %}
-            {{ form_row(form.synonym[1].synonym) }}
+            {{ form_row(form.synonym[1].synonym, {'label': '類義語(カンマ区切り)'}) }}
         {% endif %}
-        <input type="submit" name="add_url_submit" value="新規監視登録">
+        <input type="button" class="submit" name="synonym_submit" value="類語検索" data-action="{{ path("rss_recommend_synonym") }}">
+        <input type="button" class="submit" name="add_url_submit" value="新規監視登録" data-action="{{ path("rss_recommend_home_post") }}">
     {{ form_end(form, {'render_rest': false}) }}
+
 {% endblock %}

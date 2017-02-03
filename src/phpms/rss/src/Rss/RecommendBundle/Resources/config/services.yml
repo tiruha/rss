@@ -2,3 +2,10 @@ services:
 #    rss_recommend.example:
 #        class: Rss\RecommendBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+    # UrlGroupUserTypeでもentity_managerと認証済みユーザを取得出来るようにサービスに登録
+    Form_UrlGroupUserType:
+        class: Rss\RecommendBundle\Form\Type\UrlGroupUserType
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
+        tags:
+            - { name: form.type, alias: url_group_user }
+        

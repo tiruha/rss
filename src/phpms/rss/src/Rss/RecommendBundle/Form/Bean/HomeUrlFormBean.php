@@ -1,8 +1,9 @@
 <?php
 
-namespace Rss\RecommendBundle\Entity;
+namespace Rss\RecommendBundle\Form\Bean;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Url
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="url", indexes={@ORM\Index(name="url", columns={"user_id"})})
  * @ORM\Entity(repositoryClass="Rss\RecommendBundle\Repository\UrlRepository")
  */
-class Url
+class HomeUrlFormBean
 {
     /**
      * @var integer
@@ -53,6 +54,23 @@ class Url
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Rss\RecommendBundle\Entity\Synonym", mappedBy="url", cascade={"persist"})
+     */
+    protected $synonym;
+
+    /**
+     * @var string
+     */
+    private $group;    
+    
+    /**
+     * 関連するEntityを配列で作成
+     */
+    public function __construct()
+    {
+        $this->synonym = new ArrayCollection();
+    }
     
     /**
      * Get id
@@ -154,5 +172,71 @@ class Url
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     * @return Url
+     */
+    public function addSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym[] = $synonym;
+
+        return $this;
+    }
+
+    /**
+     * Remove synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     */
+    public function removeSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym->removeElement($synonym);
+    }
+
+    /**
+     * Get synonym
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSynonym()
+    {
+        return $this->synonym;
+    }
+    
+    /**
+     * Set synonym
+     *
+     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     */
+    public function setSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    {
+        $this->synonym->add($synonym);
+    }
+    
+    /**
+     * Set group
+     *
+     * @param string $group
+     * @return Group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return string 
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }
