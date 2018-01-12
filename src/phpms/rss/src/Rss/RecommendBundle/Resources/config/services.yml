@@ -8,5 +8,9 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
         tags:
             - { name: form.type, alias: url_group_user }
+    # 機械学習の中身のAPIを知らなくても使えるようにサービスを定義
     machine.learning.api:
-        class: Rss\RecommendBundle\TextAnalysis\API\YahooAPI
+        class: Rss\RecommendBundle\TextAnalysis\MachineLearningApi
+    # 機械学習の中身のAPIを知らなくても使えるようにサービスを定義
+    html.analyzer.api:
+        class: Rss\RecommendBundle\TextAnalysis\HtmlAnalyzer

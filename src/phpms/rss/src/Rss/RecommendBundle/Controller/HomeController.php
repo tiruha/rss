@@ -59,12 +59,27 @@ class HomeController extends Controller
                 $form_data->setSynonym($synonym);
             }
         }
-        
+        // service.ymlに定義したクラスをDIコンテナから取得
         $api = $this->container->get('machine.learning.api');
-        $aryy = $api->morphologicalAPI("すもももももももものうち");
+        $aryy = $api->morphological("すもももももももものうち");
         foreach ($aryy as $ing){
             $logger->debug($ing[0] . "::" . $ing[1]);
         }
+        $keyphrase_aryy = $api->keyphrase("すもももももももものうち");
+        foreach ($keyphrase_aryy as $ing){
+            $logger->debug($ing[0] . "::" . $ing[1]);
+        }
+        $distance_aryy = $api->distance("すもも");
+        foreach ($distance_aryy as $ing){
+            $logger->debug($ing[0] . "::" . $ing[1]);
+        }
+        $similarity = $api->similarity("すもも", "りんご");
+        $logger->debug("類似度:" . $similarity);
+        
+        $htmlAnalyzer = $this->container->get('html.analyzer.api');
+        $body = $htmlAnalyzer->getBody("http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC");
+        $text = $htmlAnalyzer->textExtraction($body);
+        $logger->debug("本文:" . $text);
         
         $this->container->get('session')->set('home_url', $form_data);
         return $this->redirect($this->generateUrl('rss_recommend_home'));
