@@ -98,8 +98,11 @@ rss/
 $ sudo yum -y install git  
 $ git clone https://github.com/tiruha/rss.git  
 $ cd rss  
-$ ./full_setup.sh  
-
+$ ./full_setup.sh  
+※vagrant sshによってVMに接続してある
+$ cd /var/www/src/phpms/rss
+$ ../composer.phar self-update
+$ ../composer.phar install
 
 # PHP環境の自動化  
 
