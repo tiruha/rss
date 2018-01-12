@@ -53,7 +53,7 @@ class UrlGroupUserType extends AbstractType
         $resolver->setDefaults(
                 [
                     'validation_groups' => 'url_group',
-                    'data_class' => 'Rss\RecommendBundle\Entity\UrlGroupUser',
+                    'data_class' => 'Rss\RecommendBundle\Form\Bean\UrlGroupUserBean',
                     'csrf_protection' => true,
                     'csrf_field_name' => '_token',
                 ]

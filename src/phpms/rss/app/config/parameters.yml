@@ -1,1 +1,14 @@
-{ parameters: { database_host: 127.0.0.1, database_port: '3306', database_name: phpms, database_user: phpms, database_password: phpms, mailer_transport: smtp, mailer_host: 127.0.0.1, mailer_user: phpms, mailer_password: phpms, secret: 0fdd5d6908af9fcf9fc461f09d93d6c10b631d08, database_driver: pdo_mysql, database_path: null } }
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: '3306'
+    database_name: phpms
+    database_user: phpms
+    database_password: phpms
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: phpms
+    mailer_password: phpms
+    secret: 0fdd5d6908af9fcf9fc461f09d93d6c10b631d08
+    database_driver: pdo_mysql
+    database_path: null

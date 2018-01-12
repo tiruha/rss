@@ -8,4 +8,5 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@service_container"]
         tags:
             - { name: form.type, alias: url_group_user }
-        
+    machine.learning.api:
+        class: Rss\RecommendBundle\TextAnalysis\API\YahooAPI

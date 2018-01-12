@@ -60,21 +60,13 @@ class HomeController extends Controller
             }
         }
         
-        $em = $this->getDoctrine()->getEntityManager();
-        // EntityManagerにセッション情報を登録
-        $url_data = $em->merge($form_data);
-        $user_data = $em->merge($form_data->getUser());
-        foreach ($form_data->getSynonym() as $synonym) {
-            $synonym_data = $em->merge($synonym);
-            $url_data->setSynonym($synonym_data);
-            $synonym_data->setUrl($url_data);
+        $api = $this->container->get('machine.learning.api');
+        $aryy = $api->morphologicalAPI("すもももももももものうち");
+        foreach ($aryy as $ing){
+            $logger->debug($ing[0] . "::" . $ing[1]);
         }
-        $url_data->setUser($user_data);
-        $url_data->getUser()->addUrl($url_data);
-        // DBに登録
-        $em->persist($url_data);
-        $em->flush();
-        $this->container->get('session')->set('home_url', $url_data);
+        
+        $this->container->get('session')->set('home_url', $form_data);
         return $this->redirect($this->generateUrl('rss_recommend_home'));
     }
     
