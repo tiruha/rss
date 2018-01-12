@@ -3,7 +3,8 @@
 namespace Rss\RecommendBundle\TextAnalysis\API;
 
 require_once 'HTTP/Request2.php';
-#autoload.php';
+
+use Rss\RecommendBundle\Log\Log;
 
 /**
  * YahooAPIs
@@ -20,10 +21,11 @@ class YahooAPI {
      * @param string $sentence
      */
     public function morphologicalAPI($sentence){
-        
+
         try{
-            $url = "http://jlp.yahooapis.jp/MAService/V1/parse";
-            $sentence_encode = mb_convert_encoding($sentence, 'utf-8');
+            $url = "https://jlp.yahooapis.jp/MAService/V1/parse";
+            $sentence_encode = mb_convert_encoding($sentence, 'utf-8', 'auto');
+            LOG::info("$sentence_encode:" . $sentence_encode);
             $ma_response = "pos,baseform";
             $ma_filter = "9|10";
             $parameter = [
@@ -33,23 +35,33 @@ class YahooAPI {
                     "ma_filter" => $ma_filter,
                     "sentence" => $sentence_encode
                 ];
-            $query_string = http_build_query( $parameter );
-            
+            // Httpリクエストの生成
             $request = new \HTTP_Request2();
             $request->setMethod(\HTTP_Request2::METHOD_GET);
-            $request->setUrl($url . $query_string);
+            $request->setAdapter('curl');
+            $request->setUrl($url);
+            // パラメータを付加
+            $param_url = $request->getUrl();
+            $param_url->setQueryVariables($parameter);
+            $request->setUrl($param_url);
+            LOG::info($param_url);
+            // リクエストの送信
             $response = $request->send();
             $data = $response->getBody();
             $xml = simplexml_load_string($data);
+            LOG::info("responceStatus:" . $response->getStatus());
+            LOG::info("responceBody:" . $data);
+            // レスポンスの格納
             $i = 0;
+            $result_array = array();
             if ($response->getStatus() == 200) {
                 foreach ($xml->ma_result->word_list->word as $cur) {
-                    $arry1[$i][0] = $cur->pos;
-                    $arry1[$i][1] = $cur->baseform;
+                    $result_array[$i][0] = $cur->pos;
+                    $result_array[$i][1] = $cur->baseform;
                     $i++;
                 }
             }
-            return $arry1;
+            return $result_array;
         } catch (\HTTP_Request2_Exception $e) {
             die($e->getMessage());
         } catch (Exception $e) {

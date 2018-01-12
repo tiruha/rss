@@ -4,7 +4,6 @@ namespace Rss\RecommendBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Rss\RecommendBundle\Log\Log;
 
 class UrlGroupUserType extends AbstractType
 {
