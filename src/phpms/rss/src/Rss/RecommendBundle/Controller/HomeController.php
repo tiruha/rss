@@ -59,27 +59,10 @@ class HomeController extends Controller
                 $form_data->setSynonym($synonym);
             }
         }
-        // service.ymlに定義したクラスをDIコンテナから取得
-        $api = $this->container->get('machine.learning.api');
-        $aryy = $api->morphological("すもももももももものうち");
-        foreach ($aryy as $ing){
-            $logger->debug($ing[0] . "::" . $ing[1]);
-        }
-        $keyphrase_aryy = $api->keyphrase("すもももももももものうち");
-        foreach ($keyphrase_aryy as $ing){
-            $logger->debug($ing[0] . "::" . $ing[1]);
-        }
-        $distance_aryy = $api->distance("すもも");
-        foreach ($distance_aryy as $ing){
-            $logger->debug($ing[0] . "::" . $ing[1]);
-        }
-        $similarity = $api->similarity("すもも", "りんご");
-        $logger->debug("類似度:" . $similarity);
         
-        $htmlAnalyzer = $this->container->get('html.analyzer.api');
-        $body = $htmlAnalyzer->getBody("http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC");
-        $text = $htmlAnalyzer->textExtraction($body);
-        $logger->debug("本文:" . $text);
+//        self::sampleAPICall();
+        $test_url = "http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC";
+        self::conceptSearch($test_url);
         
         $this->container->get('session')->set('home_url', $form_data);
         return $this->redirect($this->generateUrl('rss_recommend_home'));
@@ -123,5 +106,147 @@ class HomeController extends Controller
                 'loginUser' => $this->get('security.context')->getToken()->getUser()
             )
         );
+    }
+    
+    private function sampleAPICall(){
+        $logger = $this->get('logger');
+        // service.ymlに定義したクラスをDIコンテナから取得
+        $api = $this->container->get('machine.learning.api');
+        $morpho_array = $api->morphological("すもももももももものうち");
+        foreach ($morpho_array as $morpho){
+            $logger->debug($morpho[0] . "::" . $morpho[1]);
+        }
+        $keyphrase_array = $api->keyphrase("すもももももももものうち");
+        foreach ($keyphrase_array as $keyphrase){
+            $logger->debug($keyphrase[0] . "::" . $keyphrase[1]);
+        }
+        $distance_array = $api->distance("すもも");
+        foreach ($distance_array as $distance){
+            $logger->debug($distance[0] . "::" . $distance[1]);
+        }
+        $similarity = $api->similarity("すもも", "りんご");
+        $logger->debug("類似度:" . $similarity);
+        
+        $htmlAnalyzer = $this->container->get('html.analyzer.api');
+        $test_url = "http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC";
+        $body = $htmlAnalyzer->getBody($test_url);
+        $text = $htmlAnalyzer->textExtraction($body);
+        $logger->debug("本文:" . $text);
+    }
+    
+    /**
+     * 概念検索（言語モデル）
+     * 
+     * @param string $url
+     */
+    private function conceptSearch($url){
+        $logger = $this->get('logger');
+        $logger->info("conceptSearch");
+        // HTML body から本文を取得
+        $htmlAnalyzer = $this->container->get('html.analyzer.api');
+        $body = $htmlAnalyzer->getBody($url);
+        $text = $htmlAnalyzer->textExtraction($body);
+        $logger->debug("本文：" . $text);
+        // 本文の形態素解析とキーフレーズの抽出
+        $api = $this->container->get('machine.learning.api');
+        $morpho_array = $api->morphological($text);
+        foreach ($morpho_array as $morpho) {
+            $logger->debug("形態素解析結果：" . $morpho[0] . "::" . $morpho[1]);
+        }
+        $keyphrase_array = self::scoreAverage($api->keyphrase($text));
+        foreach ($keyphrase_array as $keyphrase){
+            $logger->debug("キーワードのソート結果：" . $keyphrase[0] . "::" . $keyphrase[1]);
+        }
+    }
+    
+    /**
+     * 同じキーワードは平均を取って一つにまとめる
+     * 
+     * @param array[Keyphrase][Score] $keyphrase_array
+     * @return array[Keyphrase][Score] $keyphrase_array
+     */
+    private function scoreAverage($keyphrase_array) {
+        $kye_loop_count = count($keyphrase_array);
+        /** 本体ループカウンタ */
+        $kye_same_i = 0;
+        $pre_keyphrase_array = $keyphrase_array;
+        //直接削除しないのは、ループカウンタを用いて配列の制御を行っているから、削除するとカウンタ値が変わる
+        // 本体ループ
+        while ($kye_same_i < $kye_loop_count) {
+            /** SUBループ内カウンタ */
+            $kye = 0;
+            /** 初期加算値 */
+            $plus = $keyphrase_array[$kye_same_i][1];
+            /** 一致カウンタ */
+            $kye_sum = 1;
+            // スコア0は削除対象のため飛ばす
+            if ($keyphrase_array[$kye_same_i][1] == 0) {
+                $kye_same_i++;
+                continue;
+            }
+            foreach ($pre_keyphrase_array as $pre_keyphrase) {
+                // 同じindexを参照しているため飛ばす
+                if ($kye_same_i == $kye) {
+                    $kye++;
+                    continue;
+                }
+                // スコア0は削除対象のため飛ばす
+                if ($keyphrase_array[$kye][1] == 0) {
+                    $kye++;
+                    continue;
+                }
+                //キーワードが一致
+                if (strcmp($keyphrase_array[$kye_same_i][0], $pre_keyphrase[0]) == 0) {
+                    // 一致キーワードの合計を算出
+                    $plus = $plus + $pre_keyphrase[1];
+                    /** 一致カウンタインクリメント */
+                    $kye_sum++;
+                    // 削除することを示すことを０を代入して示す
+                    $keyphrase_array[$kye][1] = 0;
+                }
+                $kye++;
+            }
+            // キーワードが一致した場合平均を算出
+            if ($kye_sum != 1) {
+                $keyphrase_array[$kye_same_i][1] = $plus / $kye_sum;
+            }
+
+            $kye_same_i++;
+        }
+
+        // 重複要素を削除
+        $sort_keyphrase_array = $keyphrase_array;
+        $kye = 0;
+        foreach ($sort_keyphrase_array as $sort_keyphrase) {
+            // ０にした要素を削除
+            if ($sort_keyphrase[1] == 0) {
+                unset($keyphrase_array[$kye]);
+            }
+            $kye++;
+        }
+        // 順番の振り直し
+        array_values($keyphrase_array);
+        // 重要度の大きい順にソート
+        $sort_array = array(0.0);
+        $sort_i = 0;
+        foreach ($keyphrase_array as $keyphrase) {
+            $sort_array[$sort_i] = $keyphrase[1];
+            $sort_i++;
+        }
+        // ソート用に用意した配列を用いて、数値として比較しソート(降順)
+        array_multisort($sort_array, SORT_DESC, SORT_NUMERIC, $keyphrase_array);
+        
+        return $keyphrase_array;
+    }
+
+    private function createSynonymArray($synonym_array){
+        $logger = $this->get('logger');
+        $api = $this->container->get('machine.learning.api');
+        foreach ($synonym_array as $synonym){
+        $distance_array = $api->distance($synonym);
+            foreach ($distance_array as $distance){
+                $logger->debug($distance[0] . "::" . $distance[1]);
+            }
+        }
     }
 }

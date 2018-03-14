@@ -26,8 +26,10 @@ class YahooAPI {
         try{
             $url = "https://jlp.yahooapis.jp/MAService/V1/parse";
             $sentence_encode = mb_convert_encoding($sentence, 'utf-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS');
-            LOG::info("$sentence_encode:" . $sentence_encode);
+            LOG::debug("文字コード変換後形態素解析対象: " . $sentence_encode);
+            // 品詞と標準化した単語を抽出
             $ma_response = "pos,baseform";
+            // 名詞と動詞を抽出
             $ma_filter = "9|10";
             $parameter = [
                     "appid" => self::APP_ID,
@@ -45,13 +47,13 @@ class YahooAPI {
             $param_url = $request->getUrl();
             $param_url->setQueryVariables($parameter);
             $request->setUrl($param_url);
-            LOG::info($param_url);
+            LOG::debug($param_url);
             // リクエストの送信
             $response = $request->send();
             $data = $response->getBody();
+            LOG::debug("responceStatus:" . $response->getStatus());
+            LOG::debug("responceBody:" . $data);
             $xml = simplexml_load_string($data);
-            LOG::info("responceStatus:" . $response->getStatus());
-            LOG::info("responceBody:" . $data);
             // レスポンスの格納
             $i = 0;
             $result_array = array();
@@ -81,7 +83,7 @@ class YahooAPI {
         try{
             $url = "https://jlp.yahooapis.jp/KeyphraseService/V1/extract";
             $sentence_encode = mb_convert_encoding($sentence, 'utf-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS');
-            LOG::info("$sentence_encode:" . $sentence_encode);
+            LOG::debug("文字コード変換後キーフレーズ抽出対象: " . $sentence_encode);
             $output = "xml";
             $parameter = [
                     "appid" => self::APP_ID,
@@ -97,13 +99,13 @@ class YahooAPI {
             $param_url = $request->getUrl();
             $param_url->setQueryVariables($parameter);
             $request->setUrl($param_url);
-            LOG::info($param_url);
+            LOG::debug($param_url);
             // リクエストの送信
             $response = $request->send();
             $data = $response->getBody();
+            LOG::debug("responceStatus:" . $response->getStatus());
+            LOG::debug("responceBody:" . $data);
             $xml = simplexml_load_string($data);
-            LOG::info("responceStatus:" . $response->getStatus());
-            LOG::info("responceBody:" . $data);
             // レスポンスの格納
             $i = 0;
             $result_array = array();

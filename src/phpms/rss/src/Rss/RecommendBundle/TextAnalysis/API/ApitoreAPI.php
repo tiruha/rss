@@ -26,7 +26,7 @@ class ApitoreAPI {
         try{
             $url = "https://api.apitore.com/api/9/word2vec-neologd-jawiki/distance";
             $word_encode = mb_convert_encoding($word, 'utf-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS');
-            LOG::info("$word_encode:" . $word_encode);
+            LOG::debug("$word_encode:" . $word_encode);
             $num = "10";
             $parameter = [
                     "access_token" => self::APP_ID,
@@ -42,13 +42,13 @@ class ApitoreAPI {
             $param_url = $request->getUrl();
             $param_url->setQueryVariables($parameter);
             $request->setUrl($param_url);
-            LOG::info($param_url);
+            LOG::debug($param_url);
             // リクエストの送信
             $response = $request->send();
             $data = $response->getBody();
             $json = json_decode( $data , true ) ;
-            LOG::info("responceStatus:" . $response->getStatus());
-            LOG::info("responceBody:" . $data);
+            LOG::debug("responceStatus:" . $response->getStatus());
+            LOG::debug("responceBody:" . $data);
             // レスポンスの格納
             $i = 0;
             $result_array = array();
@@ -83,8 +83,8 @@ class ApitoreAPI {
             $url = "https://api.apitore.com/api/8/word2vec-neologd-jawiki/similarity";
             $word1_encode = mb_convert_encoding($word1, 'utf-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS');
             $word2_encode = mb_convert_encoding($word2, 'utf-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS');
-            LOG::info("$word1_encode:" . $word1_encode);
-            LOG::info("$word2_encode:" . $word2_encode);
+            LOG::debug("$word1_encode:" . $word1_encode);
+            LOG::debug("$word2_encode:" . $word2_encode);
             $parameter = [
                     "access_token" => self::APP_ID,
                     "word1" => $word1_encode,
@@ -99,13 +99,13 @@ class ApitoreAPI {
             $param_url = $request->getUrl();
             $param_url->setQueryVariables($parameter);
             $request->setUrl($param_url);
-            LOG::info($param_url);
+            LOG::debug($param_url);
             // リクエストの送信
             $response = $request->send();
             $data = $response->getBody();
             $json = json_decode( $data , true ) ;
-            LOG::info("responceStatus:" . $response->getStatus());
-            LOG::info("responceBody:" . $data);
+            LOG::debug("responceStatus:" . $response->getStatus());
+            LOG::debug("responceBody:" . $data);
             // レスポンスの格納
             $result_similarity = 0;
             if ($response->getStatus() == 200) {
