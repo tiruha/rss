@@ -13,7 +13,7 @@ use Rss\RecommendBundle\Log\Log;
  */
 class ApitoreAPI {
     // ここにあなたのアプリケーションIDを設定してください。
-    const APP_ID = 'f0e78e20-4dbe-4c30-855d-21da0908ce0c';
+    const APP_ID = '';
 
     /**
      * 類義語/同義語検索
