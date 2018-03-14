@@ -13,7 +13,7 @@ use Rss\RecommendBundle\Log\Log;
  */
 class YahooAPI {
     // ここにあなたのアプリケーションIDを設定してください。
-    const APP_ID = 'dj0zaiZpPU5rVXRad3VROFBnRSZkPVlXazljMkZuWVdoeE5tc21jR285TUEtLSZzPWNvbnN1bWVyc2VjcmV0Jng9ZWQ-';
+    const APP_ID = '';
 
     /**
      * 形態素解析
