@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # vm config
   config.vm.provider "virtualbox" do |vb|
     vb.name = "centos6_vagrant"
-    vb.memory = "2048"
+    vb.memory = "1536"
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
   end
