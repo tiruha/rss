@@ -49,3 +49,14 @@ rss_recommend_home_post:
 rss_recommend_synonym:
     path:     /home/synonym
     defaults: { _controller: RssRecommendBundle:Home:synonym }
+
+# 結果表示
+rss_recommend_result:
+    path:     /result
+    defaults: { _controller: RssRecommendBundle:Result:result }
+    requirements: { _method: GET }
+
+rss_recommend_result_post:
+    path:     /result
+    defaults: { _controller: RssRecommendBundle:Result:resultPost }
+    requirements: { _method: POST }

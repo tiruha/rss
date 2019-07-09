@@ -35,7 +35,8 @@ class Log
         // ファイルの出力先を指定
         $file = "/var/www/src/phpms/rss/app/logs/dev.log";
         // 出力するログメッセージを表示
-        $logs_msg = "[" . $time . "] app.DEBUG: " . $msg . PHP_EOL;
+        $trace_msg = debug_backtrace();
+        $logs_msg = "[" . $time . "] app.DEBUG: [" . $trace_msg[0]['file'] . "(" . $trace_msg[0]['line'] . ")]" . $msg . PHP_EOL;
         file_put_contents($file, print_r($logs_msg, TRUE), FILE_APPEND | LOCK_EX);
     }
 }

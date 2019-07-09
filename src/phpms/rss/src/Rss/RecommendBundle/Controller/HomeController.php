@@ -63,31 +63,59 @@ class HomeController extends Controller
         );
         $form->bind($this->getRequest());
         $form_data = $form->getData();
-        // 類義語がない場合、空データを設定
+        //formから取得したデータを出力
+        $logger->debug("HomeUrlFormBean.getId():" . $form_data->getId());
+        $logger->debug("HomeUrlFormBean.getUrl():" . $form_data->getUrl());
+        $url = $form_data->getUrl();
+        $logger->debug("HomeUrlFormBean.getLastUpdatingTime():" . $form_data->getLastUpdatingTime());
+        $logger->debug("HomeUrlFormBean.getWebsiteBytesNumber():" . $form_data->getWebsiteBytesNumber());
+        $logger->debug("HomeUrlFormBean.getGroup().getUrlGroup():" . $form_data->getGroup()->getUrlGroup());
+        //選択したグループを取得
+        $match_group = preg_replace('/userid[0-9]+_group[0-9]+_/', '', $form_data->getGroup()->getUrlGroup());
+        $logger->debug("選択グループ=" . $match_group);
+        //検索語、類義語をcsvから変換
+        //Synonym配列[0]が検索語(main)、[1]が類義語(sub)
+        $synonym_array = array();
+        $synonym_counter = 0;
         foreach ($form_data->getSynonym() as $synonym_data) {
-            if($synonym_data->getSynonymSeverity() === "sub"){
-                // 類似語の追加
-                $synonym = new Synonym();
-                // 空データを追加
-                $synonym->setSynonym(null);
-                $synonym->setSynonymSeverity("sub");
-                $form_data->setSynonym($synonym);
+            $logger->debug("HomeUrlFormBean.getSynonym().getSynonym():" . $synonym_data->getSynonym());
+            $logger->debug("HomeUrlFormBean.getSynonym().getSynonymSeverity():" . $synonym_data->getSynonymSeverity());
+            $synonym_data_split = explode(",", $synonym_data->getSynonym());
+            foreach ($synonym_data_split as $synonym) {
+                $logger->debug("検索語・類義語:" . $synonym);
+                $synonym_array[$synonym_counter][0] = $synonym;
+                $synonym_array[$synonym_counter][1] = $synonym_data->getSynonymSeverity();
+                $synonym_counter++;
             }
         }
         
+        //概念検索の呼び出し
+        $relevance_score = self::conceptSearch($url, $synonym_array);
+//#########################################################################################
+        //機械学習呼び出しの確認
 //        self::sampleAPICall();
-        $test_url = "http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC";
-        $test_synonym_array = array();
-        $test_synonym_array[0][0] = "プログラマ";
-        $test_synonym_array[0][1] = "main";
-        $test_synonym_array[1][0] = "プログラマー";
-        $test_synonym_array[1][1] = "sub";
-        $test_synonym_array[0][0] = "PG";
-        $test_synonym_array[0][1] = "sub";
-        self::conceptSearch($test_url, $test_synonym_array);
+        //テスト用のサンプル呼び出し設定
+//        $test_url = "http://d.hatena.ne.jp/keyword/%A5%D7%A5%ED%A5%B0%A5%E9%A5%DE%A1%BC";
+////        $test_url = "http://www.etechno.co.jp/company/company_top.html";
+//        $test_synonym_array = array();
+//        $test_synonym_array[0][0] = "イーテクノ";
+//        $test_synonym_array[0][1] = "main";
+//        $test_synonym_array[1][0] = "開発";
+//        $test_synonym_array[1][1] = "sub";
+//        $test_synonym_array[2][0] = "システム";
+//        $test_synonym_array[2][1] = "sub";
+//        $test_synonym_array[3][0] = "提案力";
+//        $test_synonym_array[3][1] = "sub";
+//        $test_synonym_array[4][0] = "高付加価値サービス";
+//        $test_synonym_array[4][1] = "sub";
+//        $relevance_score = self::conceptSearch($test_url, $test_synonym_array);
+//#########################################################################################
         
+        //セッションに保存
         $this->container->get('session')->set('home_url', $form_data);
-        return $this->redirect($this->generateUrl('rss_recommend_home'));
+        //結果表示画面への遷移
+        return $this->render('RssRecommendBundle:Result:result.html.twig'
+                , array('relevanceScore' => ($relevance_score)? "関連度が'高い'検索です。":"関連度が'低い'検索です。"));
     }
     
     /**
@@ -99,6 +127,7 @@ class HomeController extends Controller
     {
         $logger = $this->get('logger');
         $logger->info("synonym post action");
+        $api = $this->container->get('machine.learning.api');
         
         $form = $this->createForm(
             new UrlType(), 
@@ -106,26 +135,30 @@ class HomeController extends Controller
         );
         $form->bind($this->getRequest());
         $form_data = $form->getData();
-        // 登録されているデータがない場合、新規データを設定
+        // 検索語を取得
         foreach ($form_data->getSynonym() as $synonym_data) {
-            if($synonym_data->getSynonymSeverity() === "sub"){
-                $target_synonym_data = $synonym_data;
+            if($synonym_data->getSynonymSeverity() === "main"){
+                $target_synonym_data = $synonym_data->getSynonym();
             }
         }
-        if(!isset($target_synonym_data)) {
-            // 類似語の追加
-            $synonym = new Synonym();
-            // TODO: 類義語を取得する処理を追加
-            // 仮データを追加
-            $synonym->setSynonym("新規類義語辞典");
-            $synonym->setSynonymSeverity("sub");
-            $form_data->setSynonym($synonym);
-        } else {
-            // TODO: 類義語を取得する処理を追加
-            // 仮データに上書き
-            $target_synonym_data->setSynonym("変更類義語辞典");
+        //指定した検索語からさらに類義語を検索
+        $sub_synonym_data = "";
+        $synonym_data_split = explode(",", $target_synonym_data);
+        foreach ($synonym_data_split as $synonym) {
+            $distance_array = $api->distance($synonym);
+            foreach ($distance_array as $distance){
+                $logger->debug($distance[0] . "::" . $distance[1]);
+                $sub_synonym_data = $sub_synonym_data . "," . $distance[0];
+            }
         }
-        
+        $logger->debug("sub検索結果単語:" . $sub_synonym_data);
+        // 類似語の追加
+        $synonym = new Synonym();
+        $synonym->setSynonym(ltrim($sub_synonym_data, ","));
+        $synonym->setSynonymSeverity("sub");
+        $form_data->removeSynonym(1);
+        $form_data->setSynonym($synonym);
+        //セッションに保存
         $this->container->get('session')->set('home_url', $form_data);
         return $this->render('RssRecommendBundle:Home:home.html.twig', 
             array(
@@ -168,7 +201,9 @@ class HomeController extends Controller
     /**
      * 概念検索（言語モデル）
      * 
-     * @param string $url
+     * @param string $url 検索対象のURL
+     * @param array[類義語][main_sab] $synonym_data 類似語単語配列
+     * @return boolean true:関連度の高い検索 / false:関連度の低い検索
      */
     private function conceptSearch($url, $synonym_data){
         $logger = $this->get('logger');
@@ -406,7 +441,7 @@ class HomeController extends Controller
             //キーワード毎に初期化
             $wd = 0;
             foreach ($text_morpho_array as $text_morpho) {
-                if (strcmp($keyphrase[0], $synonym[1]) == 0) {
+                if (strcmp($keyphrase[0], $text_morpho[1]) == 0) {
 //                if ($api->similarity($keyphrase[0], $text_morpho[1]) >= $p_similarity_matched) {
                     $wd++;
                 }
@@ -418,13 +453,13 @@ class HomeController extends Controller
         //重要度の高いキーワードから計算するようにソートする
         rsort($p_wd_kye, SORT_NUMERIC);
         $logger->debug("各キーワードの重み降順での並び：");
-        $logger->debug(var_dump($p_wd_kye));
+        $logger->debug(implode(", ", $p_wd_kye));
 
         ########################
         ## 各種求めた値の表示
         ########################
         $logger->debug("一致した各関連単語の重み：");
-        $logger->debug(var_dump($p_wd));
+        $logger->debug(implode(", ", $p_wd));
 
         ########################################
         ## 最終的な類似度の数値を求め比較する
@@ -439,32 +474,32 @@ class HomeController extends Controller
                 $synonym_counter++;
             }
         }
-        if ($p_rd >= 1.0) {
-            $p_rd = 0.0;
-        }
         $logger->debug("関連単語の類似度：" . $p_rd);
         $logger->debug("関連単語の数" . $synonym_counter);
 
         //キーワード単語の類似度計算
         $counter = 0;     //計算回数
         $p_rd_kye = 1.0;  //キーワードに対する検索対象文献の離散集合dの類似度
-        foreach ($p_wd_kye as $ruiji) {
+        foreach ($p_wd_kye as $weight) {
             //関連単語の重み計算を実行した回数のみ計算を実施することで、類似度が小さくなりすぎるのを防ぐ
             if ($counter >= $synonym_counter) {
                 break;
             }
-            if ($ruiji > 0) {
-                $p_rd_kye = $p_rd_kye * $ruiji;
+            if ($weight > 0) {
+                $p_rd_kye = $p_rd_kye * $weight;
             }
             $counter++;
         }
         $logger->debug("キーワードと本文の類似度：" . $p_rd_kye);
 
         //類似度数値の比較
-        if ($p_rd > $p_rd_kye) {
+        //関連単語類似度 > キーワードの類似度*一致判定割合
+        if ($p_rd > ($p_rd_kye * $p_similarity_matched)) {
             $logger->debug("関連度（重要度）の高い更新です");
+            return true;
         } else {
             $logger->debug("関連度（重要度）の低い更新です");
+            return false;
         }
     }
     
@@ -552,7 +587,8 @@ class HomeController extends Controller
      * 類義語/同義語配列の作成
      * 類義語を形態素解析にかけた結果を返却
      * 
-     * @param type $synonym_array
+     * @param array[類義語][main_sab] $synonym_data 形態素解析対象の類義語
+     * @return array[pos][baseform] $morpho_array 形態素解析結果
      */
     private function createSynonymArray($synonym_data){
         $logger = $this->get('logger');

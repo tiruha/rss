@@ -16,9 +16,9 @@ class UrlGroupUserBean
     private $urlGroup;
 
     /**
-     * Get urlGroup
+     * Get string
      *
-     * @return string 
+     * @return string ["userid" . $this->user->getId() . "_group" . $group_counter . "_" . $group->getUrlGroupName()]
      */
     public function getUrlGroup()
     {
@@ -26,7 +26,7 @@ class UrlGroupUserBean
     }
 
     /**
-     * Set urlGroup
+     * Set string
      *
      * @param string $urlGroup
      */

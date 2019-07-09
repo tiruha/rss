@@ -60,7 +60,7 @@ class HomeUrlFormBean
     protected $synonym;
 
     /**
-     * @var string
+     * @var Rss\RecommendBundle\Form\Bean\UrlGroupUserBean
      */
     private $group;    
     
@@ -190,11 +190,11 @@ class HomeUrlFormBean
     /**
      * Remove synonym
      *
-     * @param \Rss\RecommendBundle\Entity\Synonym $synonym
+     * @param integer $removeIndexNumber
      */
-    public function removeSynonym(\Rss\RecommendBundle\Entity\Synonym $synonym)
+    public function removeSynonym($removeIndexNumber = 1)
     {
-        $this->synonym->removeElement($synonym);
+        $this->synonym->removeElement($removeIndexNumber);
     }
 
     /**

@@ -37,6 +37,11 @@ class ApitoreAPI {
             $request = new \HTTP_Request2();
             $request->setMethod(\HTTP_Request2::METHOD_GET);
             $request->setAdapter('curl');
+            //証明書の期限切れでhttps接続不可のため、ssl確認をしないように設定
+            $request->setConfig(array(
+                'ssl_verify_peer'   => FALSE,
+                'ssl_verify_host'   => FALSE
+            ));
             $request->setUrl($url);
             // パラメータを付加
             $param_url = $request->getUrl();

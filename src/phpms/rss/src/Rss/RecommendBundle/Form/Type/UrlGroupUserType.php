@@ -29,7 +29,7 @@ class UrlGroupUserType extends AbstractType
         $groups_array = [];
         $group_counter = 0;
         foreach ($groups as $group) {
-            $groups_array["userid" . $this->user->getId() . "_group" . $group_counter] = $group->getUrlGroupName();
+            $groups_array["userid" . $this->user->getId() . "_group" . $group_counter . "_" . $group->getUrlGroupName()] = $group->getUrlGroupName();
             $group_counter++;
         }
         $builder->add('url_group', 'choice', array(

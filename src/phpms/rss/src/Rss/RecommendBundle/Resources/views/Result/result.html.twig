@@ -1,0 +1,12 @@
+{% extends "RssRecommendBundle::layout.html.twig" %}
+
+{% block title %}RSS拡張システム結果画面 | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <ul>
+        <li>関連度結果: {{ relevanceScore }}</li>
+    </ul>
+    <form method="get">
+        <input type="button" value="戻る" onClick="location.href='{{ path("rss_recommend_home") }}';">
+    </form>
+{% endblock %}
